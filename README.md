@@ -33,3 +33,9 @@
     https://dhpublish-qa.dailyhunt.in/dhcontent/SID_408/20200315/20005847/20005847.mp4
     https://dhpublish-qa.dailyhunt.in/dhcontent/SID_407/20200314/20005821/20005821.mp4
     https://dhpublish-qa.dailyhunt.in/dhcontent/SID_408/20200314/20005819/20005819.mp4
+    
+# CPU Info
+
+    Name	Intel Core i5 3210M
+    Cores	2
+    Threads	4
