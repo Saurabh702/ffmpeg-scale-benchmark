@@ -1,20 +1,54 @@
 package ffmpeg_test;
 
 import java.io.IOException;
-import java.util.Scanner;
+//import java.util.Scanner;
 
 public class Benchmark {
-	public static float timer, timerT1, timerT2;
 
+	/*	Help
+	 *  ====
+	 *  
+	 *  java Benchmark <input-file> <output-file> <new-resolution> <processing-method>
+	 *  	input-file : file path for input video
+	 *  	output-file : file path for output video
+	 *  	new-resolution : a resolution for the output video which is divisible by 2
+	 *  	processing-method : w (process whole video) or s (split video into 2 segments and process each part) 
+	 */
+	
+	/*	Batch Run
+	 *	=========
+	 *
+	 *  To run this program over multiple files in Windows CMD, do the following
+	 * 
+	 * 	->	Create a Runnable jar ( command to run the jar file : java -jar test.jar <input> <output> <resolution> <w/s> )
+	 * 
+	 * 	->	To process all videos in a directory as a whole :
+	 * 		
+	 * 		FOR %A IN ("\path\to\directory\*") DO java -jar <jar-name>.jar %~fA \path\to\output\%~nA_W%~xA <resolution> w
+	 * 
+	 *  -> 	To process all videos in a directory as segments :
+	 * 		
+	 * 		FOR %A IN ("\path\to\directory\*") DO java -jar <jar-name>.jar %~fA \path\to\output\%~nA_S%~xA <resolution> s
+	 * 
+	 *  References
+	 *  ==========
+	 *  
+	 *  ->	https://ss64.com/ 
+	 *  
+	 *  ->	https://superuser.com/a/489242
+	 */
+	
+	public static float timer, timerT1, timerT2;
+	
 	public static void main(String[] args) throws IOException {
 		
 		String command,input_filepath, output_filepath, duration;
 		String resolution[] = new String[2];
 		int new_resolution;
-		Scanner reader = new Scanner(System.in);
+		//Scanner reader = new Scanner(System.in);
 		
-		System.out.print("Enter the Input file path : ");
-		input_filepath = reader.nextLine();
+		//System.out.print("Enter the Input file path : ");
+		input_filepath = args[0];//reader.nextLine();
 	    
 	    /*
 	     * Get Duration : ffprobe -i input.mp4 -show_entries format=duration -v quiet -of csv="p=0"
@@ -30,29 +64,31 @@ public class Benchmark {
 	    command = "ffprobe -i " + input_filepath + " -show_entries stream=width,height -v quiet -of csv=\"p=0\"";
 	    resolution =  Processes.run(new String[] {"cmd.exe","/c",command}).split(",");
 	    
-	    System.out.println("Input file info : Duration = " + duration + " seconds , Resolution = " + resolution[1].trim() + "p");
+	    System.out.println("Input file info : Path = " + input_filepath + " , Duration = " + duration + " seconds , Resolution = " + resolution[1].trim() + "p");
 	    
-	    System.out.print("Enter new resolution (144,240,360,480,720...) : ");
-	    new_resolution = reader.nextInt();
+	    //System.out.print("Enter new resolution (144,240,360,480,720...) : ");
+	    new_resolution = Integer.parseInt(args[2]);//reader.nextInt();
 	    
-	    reader.nextLine();
+	    //reader.nextLine();
 	    
-	    System.out.print("Enter the Output file path : ");
-	    output_filepath = reader.nextLine();
+	    //System.out.print("Enter the Output file path : ");
+	    output_filepath = args[1];//reader.nextLine();
 	    
-	    System.out.print("Process video as a whole (1) or Process as segments (2) ? ");
+	    //System.out.print("Process video as a whole (1) or Process as segments (2) ? ");
 	    
 	    /*
 	     * To avoid width not divisible by 2 error in ffmpeg : https://stackoverflow.com/a/29582287
 	     * Note: New resolution(height) should be divisible by 2
 	     */
 	    
-	    switch(reader.nextInt())
+	    int choice = args[3].equals("w")? 1 : args[3].equals("s")? 2 : 0;
+	    	
+	    switch(choice) //reader.nextInt()
 	    {
 		    case 1: 
 		    	    System.out.println("\nProcessing...");
 		    	    command = "ffmpeg -nostats -i " + input_filepath + " -vf scale=-2:" + new_resolution + " " + output_filepath + " -benchmark 2>&1 | findstr rtime";
-		    		System.out.println(Processes.run(new String[] {"cmd.exe","/c",command}));
+		    		System.out.println("\nBenchmark: " + Processes.run(new String[] {"cmd.exe","/c",command}).split("=")[3].replace("s","").trim() + "s");
 		    		break;
 		    case 2: 
 		    	    System.out.println("\nSplitting video into 2 approx. equal segments...");
@@ -138,6 +174,6 @@ public class Benchmark {
 	    command = "rm temp1.mp4 temp2.mp4 list.txt output1.mp4 output2.mp4";
 	    Processes.run(new String[] {"cmd.exe","/c",command});
 	    
-	    reader.close();	
+	    //reader.close();	
 	}
 }
