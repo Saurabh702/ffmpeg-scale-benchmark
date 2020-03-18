@@ -18,17 +18,17 @@ public class Benchmark {
 	/*	Batch Run
 	 *	=========
 	 *
-	 *  To run this program over multiple files in Windows CMD, do the following
+	 *	To run this program over multiple files in Windows CMD, do the following
 	 * 
-	 * 	->	Create a Runnable jar ( command to run the jar file : java -jar test.jar <input> <output> <resolution> <w/s> )
+	 *	->	Create a Runnable jar ( command to run the jar file : java -jar test.jar <input> <output> <resolution> <w/s> )
 	 * 
-	 * 	->	To process all videos in a directory as a whole :
+	 *	->	To process all videos in a directory as a whole :
 	 * 		
-	 * 		FOR %A IN ("\path\to\directory\*") DO java -jar <jar-name>.jar %~fA \path\to\output\%~nA_W%~xA <resolution> w
+	 *		FOR %A IN ("\path\to\directory\*") DO java -jar <jar-name>.jar %~fA \path\to\output\%~nA_W%~xA <resolution> w
 	 * 
-	 *  -> 	To process all videos in a directory as segments :
+	 *	->	To process all videos in a directory as segments :
 	 * 		
-	 * 		FOR %A IN ("\path\to\directory\*") DO java -jar <jar-name>.jar %~fA \path\to\output\%~nA_S%~xA <resolution> s
+	 *		FOR %A IN ("\path\to\directory\*") DO java -jar <jar-name>.jar %~fA \path\to\output\%~nA_S%~xA <resolution> s
 	 * 
 	 *  References
 	 *  ==========
